@@ -28,8 +28,9 @@ _
         modules => {
             schema => ['array*', of => 'str*', min_len=>1],
             req => 1,
-            pos => 1,
+            pos => 0,
             greedy => 1,
+            'x.schema.element_entity' => 'modulename',
         },
     },
     examples => [
