@@ -16,12 +16,23 @@ $SPEC{module_depakable} = {
     summary => 'Check whether a module (or modules) is (are) depakable',
     description => <<'_',
 
-This routine tries to answer if a module is "depakable" (i.e. fatpackable or
-datapackable). The module should be pure-perl and its recursive dependencies
-must all be either core or pure-perl too. To check this, the module must be
-installed because to guess if the module is pure-perl, `Module::XSOrPP` is used
-and it requires analyzing the module's source code. Also, `lcpan` is required to
-read the recursive dependencies.
+This routine tries to determine if a module is "depakable" (i.e. fatpackable or
+datapackable). That means, the module is pure-perl and its recursive
+dependencies are all either core or pure-perl too.
+
+When all the modules that a script requires are depakable, and after the script
+is packed with its modules (and their recursive non-core dependencies), running
+the script will only require core modules and the script can be deployed into a
+fresh perl installation.
+
+On the other hand, if a module is not depakable, that means the module itself is
+XS, or one of its recursive dependencies is non-core XS. You cannot then
+fatpack/datapack the module.
+
+To check whether a module is depakable, the module must be installed (because to
+guess if the module is pure-perl, `Module::XSOrPP` is used and it requires
+analyzing the module's source code). Also, `lcpan` must be required to provide
+the recursive dependencies information.
 
 _
     args => {
