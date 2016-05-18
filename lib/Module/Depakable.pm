@@ -130,3 +130,7 @@ sub prereq_depakable {
 
 1;
 # ABSTRACT:
+
+=head1 SEE ALSO
+
+L<App::depak>
