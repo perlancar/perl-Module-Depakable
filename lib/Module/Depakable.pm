@@ -42,7 +42,6 @@ _
 };
 sub module_depakable {
     require App::lcpan::Call;
-    require Module::Path::More;
     require Module::XSOrPP;
 
     my %args = @_;
@@ -50,11 +49,10 @@ sub module_depakable {
     my $mods = $args{modules};
 
     for my $mod (@$mods) {
-        unless (Module::Path::More::module_path(module => $mod)) {
-            return [500, "Module '$mod' is not installed"];
-        }
-        unless (my $xs_or_pp = Module::XSOrPP::xs_or_pp($mod)) {
-            return [500, "Can't determine whether '$mod' is XS/PP"];
+        my $xs_or_pp;
+        unless ($xs_or_pp = Module::XSOrPP::xs_or_pp($mod)) {
+            return [500, "Can't determine whether '$mod' is XS/PP ".
+                        "(probably not installed?)"];
         }
         unless ($xs_or_pp =~ /pp/) {
             return [500, "Module '$mod' is XS"];
@@ -62,7 +60,10 @@ sub module_depakable {
     }
 
     my $res = App::lcpan::Call::call_lcpan_script(argv=>[
-        "deps", "-R", "--with-xs-or-pp", @$mods]);
+        "deps",
+        #"--phase", "runtime", "--rel", "requires", # the default
+        "-R", "--with-xs-or-pp",
+        @$mods]);
     return $res unless $res->[0] == 200;
 
     for my $entry (@{$res->[2]}) {
