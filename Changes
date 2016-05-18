@@ -1,5 +1,12 @@
 Revision history for Module-Depakable
 
+0.004   2016-05-18 (PERLANCAR)
+
+	- No functional changes.
+
+	- [doc] Remove extraneous (copy-pasted) description.
+
+
 0.003   2016-05-18 (PERLANCAR)
 
 	- Add prereq_depakable().
