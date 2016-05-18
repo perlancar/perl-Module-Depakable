@@ -43,6 +43,7 @@ _
 };
 sub module_depakable {
     require App::lcpan::Call;
+    require Module::CoreList::More;
     require Module::XSOrPP;
 
     my %args = @_;
@@ -55,8 +56,15 @@ sub module_depakable {
             return [500, "Can't determine whether '$mod' is XS/PP ".
                         "(probably not installed?)"];
         }
-        unless ($xs_or_pp =~ /pp/) {
-            return [500, "Module '$mod' is XS"];
+        if ($args{_is_prereqs}) {
+            unless ($xs_or_pp =~ /pp/ ||
+                        Module::CoreList::More->is_still_core($mod)) {
+            return [500, "Prerequisite '$mod' is not PP nor core"];
+            }
+        } else {
+            unless ($xs_or_pp =~ /pp/) {
+                return [500, "Module '$mod' is XS"];
+            }
         }
     }
 
@@ -72,15 +80,46 @@ sub module_depakable {
         $mod =~ s/^\s+//;
         next if $mod eq 'perl';
         if (!$entry->{xs_or_pp}) {
-            return [500, "Prerequisite module '$mod' is not installed ".
+            return [500, "Prerequisite '$mod' is not installed ".
                 "or cannot be guessed whether it's XS/PP"];
         }
         if (!$entry->{is_core} && $entry->{xs_or_pp} !~ /pp/) {
-            return [500, "Prerequisite module '$mod' is not PP nor core"];
+            return [500, "Prerequisite '$mod' is not PP nor core"];
         }
     }
 
     [200, "OK (all modules are depakable)"];
+}
+
+$SPEC{prereq_depakable} = {
+    v => 1.1,
+    summary => 'Check whether prereq (and their recursive prereqs) are depakable',
+    description => <<'_',
+
+This routine is exactly like `module_depakable` except it allows the prereq(s)
+themselves to be core XS, while `module_depakable`
+
+This routine tries to answer if a module is "depakable" (i.e. fatpackable or
+datapackable). The module should be pure-perl and its recursive dependencies
+must all be either core or pure-perl too. To check this, the module must be
+installed because to guess if the module is pure-perl, `Module::XSOrPP` is used
+and it requires analyzing the module's source code. Also, `lcpan` is required to
+read the recursive dependencies.
+
+_
+    args => {
+        prereqs => {
+            schema => ['array*', of => 'str*', min_len=>1],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            'x.schema.element_entity' => 'modulename',
+        },
+    },
+};
+sub prereq_depakable {
+    my %args = @_;
+    module_depakable(modules => $args{prereqs}, _is_prereqs=>1);
 }
 
 1;
