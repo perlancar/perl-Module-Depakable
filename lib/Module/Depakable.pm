@@ -134,3 +134,5 @@ sub prereq_depakable {
 =head1 SEE ALSO
 
 L<App::depak>
+
+L<depakable>, CLI for this module.
