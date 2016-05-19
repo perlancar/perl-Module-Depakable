@@ -23,11 +23,13 @@ run with requiring only core perl modules installed. The word "depak-able"
 fatpack/datapack technique.
 
 Let's start with the aforementioned goal: making a script run with only
-requiring core perl modules installed. All the other modules that the script
-might use are packed along inside the script using fatpack (put inside a hash
-variable) or datapack (put in the DATA section) technique. But XS modules cannot
-be packed using this technique. And therefore, a module that requires non-core
-XS modules (either directly or indirectly) also cannot be used.
+requiring core perl modules installed. This is a pretty reasonable goal for a
+common use-case: deploying a Perl application to a fresh perl installation. All
+the non-core modules that the script might use are packed along inside the
+script using fatpack (put inside a hash variable) or datapack (put in the DATA
+section) technique. But XS modules cannot be packed using this technique. And
+therefore, a module that requires non-core XS modules (either directly or
+indirectly) also cannot be used.
 
 So in other words, this routine checks that a module is PP (pure-perl) *and* all
 of its (direct and indirect) dependencies are PP or core.
