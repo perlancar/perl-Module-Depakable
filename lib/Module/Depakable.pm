@@ -16,23 +16,29 @@ $SPEC{module_depakable} = {
     summary => 'Check whether a module (or modules) is (are) depakable',
     description => <<'_',
 
-This routine tries to determine if a module is "depakable" (i.e. fatpackable or
-datapackable). That means, the module is pure-perl and its recursive
-dependencies are all either core or pure-perl too.
+This routine tries to determine whether the module(s) you specify, when use-d by
+a script, won't impair the ability to depak the script so that the script can
+run with requiring only core perl modules installed. The word "depak-able"
+(depak) comes from the name of the application that can pack a script using
+fatpack/datapack technique.
 
-When all the modules that a script requires are depakable, and after the script
-is packed with its modules (and their recursive non-core dependencies), running
-the script will only require core modules and the script can be deployed into a
-fresh perl installation.
+Let's start with the aforementioned goal: making a script run with only
+requiring core perl modules installed. All the other modules that the script
+might use are packed along inside the script using fatpack (put inside a hash
+variable) or datapack (put in the DATA section) technique. But XS modules cannot
+be packed using this technique. And therefore, a module that requires non-core
+XS modules (either directly or indirectly) also cannot be used.
 
-On the other hand, if a module is not depakable, that means the module itself is
-XS, or one of its recursive dependencies is non-core XS. You cannot then
-fatpack/datapack the module.
+So in other words, this routine checks that a module is PP (pure-perl) *and* all
+of its (direct and indirect) dependencies are PP or core.
 
-To check whether a module is depakable, the module must be installed (because to
-guess if the module is pure-perl, `Module::XSOrPP` is used and it requires
-analyzing the module's source code). Also, `lcpan` must be required to provide
-the recursive dependencies information.
+To check whether a module is PP/XS, `Module::XSOrPP` is used and this requires
+that the module is installed because `Module::XSOrPP` guesses by analyzing the
+module's source code.
+
+To list all direct and indirect dependencies of a module, `lcpan` is used, so
+that application must be installed and run first to download and index a local
+CPAN/CPAN-like repository.
 
 _
     args => {
