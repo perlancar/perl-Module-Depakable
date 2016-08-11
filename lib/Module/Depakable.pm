@@ -94,20 +94,29 @@ sub module_depakable {
         @$mods]);
     return $res unless $res->[0] == 200;
 
+    my %errors; # key = module name, val = reason
     for my $entry (@{$res->[2]}) {
         my $mod = $entry->{module};
         $mod =~ s/^\s+//;
         next if $mod eq 'perl';
         if (!$entry->{xs_or_pp}) {
-            return [500, "Prerequisite '$mod' is not installed ".
-                "or cannot be guessed whether it's XS/PP"];
+            $errors{$mod} = 'not installed or cannot guess XS/PP';
         }
         if (!$entry->{is_core} && $entry->{xs_or_pp} !~ /pp/) {
-            return [500, "Prerequisite '$mod' is not PP nor core"];
+            $errors{$mod} = 'not PP nor core';
         }
     }
 
-    [200, "OK (all modules are depakable)"];
+    if (keys %errors) {
+        return [
+            500,
+            "Prerequisite(s) not depakable: ".
+                join(", ", map {"$_ ($errors{$_})"} sort keys %errors),
+            undef,
+            {'func.raw' => \%errors}];
+    } else {
+        return [200, "OK (all modules are depakable)"];
+    }
 }
 
 $SPEC{prereq_depakable} = {
