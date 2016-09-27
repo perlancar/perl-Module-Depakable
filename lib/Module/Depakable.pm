@@ -34,13 +34,13 @@ indirectly) also cannot be used.
 So in other words, this routine checks that a module is PP (pure-perl) *and* all
 of its (direct and indirect) dependencies are PP or core.
 
-To check whether a module is PP/XS, `Module::XSOrPP` is used and this requires
-that the module is installed because `Module::XSOrPP` guesses by analyzing the
-module's source code.
+To check whether a module is PP/XS, <pm:Module::XSOrPP> is used and this
+requires that the module is installed because <pm:Module::XSOrPP> guesses by
+analyzing the module's source code.
 
-To list all direct and indirect dependencies of a module, `lcpan` is used, so
-that application must be installed and run first to download and index a local
-CPAN/CPAN-like repository.
+To list all direct and indirect dependencies of a module, <prog:lcpan> is used,
+so that application must be installed and run first to download and index a
+local CPAN/CPAN-like repository.
 
 _
     args => {
