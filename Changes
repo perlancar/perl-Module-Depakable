@@ -1,5 +1,3 @@
-Revision history for Module-Depakable
-
 0.007   2016-08-11 (PERLANCAR)
 
 	- Return all errors (including in result metadata in func.raw key).
