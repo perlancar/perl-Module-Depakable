@@ -1,9 +1,9 @@
-0.007   2016-08-11 (PERLANCAR)
+0.007   2016-08-11  Released-By: PERLANCAR
 
 	- Return all errors (including in result metadata in func.raw key).
 
 
-0.006   2016-05-19 (PERLANCAR)
+0.006   2016-05-19  Released-By: PERLANCAR
 
 	- No functional changes.
 
@@ -11,30 +11,30 @@
 	  time.
 
 
-0.005   2016-05-18 (PERLANCAR)
+0.005   2016-05-18  Released-By: PERLANCAR
 
 	- No functional changes.
 
 	- [doc] Rewrite description.
 
 
-0.004   2016-05-18 (PERLANCAR)
+0.004   2016-05-18  Released-By: PERLANCAR
 
 	- No functional changes.
 
 	- [doc] Remove extraneous (copy-pasted) description.
 
 
-0.003   2016-05-18 (PERLANCAR)
+0.003   2016-05-18  Released-By: PERLANCAR
 
 	- Add prereq_depakable().
 
 
-0.002   2016-05-18 (PERLANCAR)
+0.002   2016-05-18  Released-By: PERLANCAR
 
 	- Tweak/fix Rinci metadata.
 
 
-0.001   2016-05-18 (PERLANCAR)
+0.001   2016-05-18  Released-By: PERLANCAR
 
         - First release.
